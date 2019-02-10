@@ -20,7 +20,15 @@ class Account(models.Model):
 
     def __str__(self):
         return self.name
-
+    
+    def check_balance(self):
+        self.balance = sum(
+           t.amount for t in self.transactions.all() if t.active
+        )
+        if self.balance >= 0:
+            return True
+        else: 
+            return False
 
 class Transaction(models.Model):
     """
@@ -40,9 +48,3 @@ class Transaction(models.Model):
     active = models.BooleanField()
     create_time = models.DateTimeField(auto_now_add=True)
     update_time = models.DateTimeField(auto_now=True)
-
-    def check_validity(self, account):
-        if account.balance < self.amount and self.active is not True:
-            return False 
-        elif account.balance > self.amount and self.active is True:
-            return True
