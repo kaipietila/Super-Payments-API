@@ -40,3 +40,9 @@ class Transaction(models.Model):
     active = models.BooleanField()
     create_time = models.DateTimeField(auto_now_add=True)
     update_time = models.DateTimeField(auto_now=True)
+
+    def check_validity(self, account):
+        if account.balance < self.amount and self.active is not True:
+            return False 
+        elif account.balance > self.amount and self.active is True:
+            return True

@@ -1,6 +1,7 @@
 from django.test import TestCase
 from fintech.models import Account, Transaction
 from django.contrib.auth.models import User
+import datetime
 
 class AccountTest(TestCase):
 
@@ -9,9 +10,11 @@ class AccountTest(TestCase):
         self.account = Account.objects.create(name='testAccount', 
                                                 balance =100.00, user=self.user)
         self.balanced_transaction = Transaction.objects.create(account=self.account, amount=50,
-                                                            description='test', active=True)
+                                                            description='test', active=True,
+                                                            transaction_date = datetime.datetime.now())
         self.overdrawn_transaction = Transaction.objects.create(account=self.account, amount=150,
-                                                            description='test', active=True) 
+                                                            description='test', active=True,
+                                                            transaction_date = datetime.datetime.now()) 
 
     def test_user_creation(self):
         self.assertEqual(self.user.username, 'testUser')
@@ -31,5 +34,5 @@ class AccountTest(TestCase):
         self.assertEqual(self.overdrawn_transaction.description, 'test')
 
     def test_transaction_overdraw(self):
-        self.assertTrue(self.balanced_transaction.check_balance(self.account))
-        self.assertFalse(self.overdrawn_transaction.check_balance(self.account))                                                 
+        self.assertTrue(self.balanced_transaction.check_validity(self.account))
+        self.assertFalse(self.overdrawn_transaction.check_validity(self.account)) 
