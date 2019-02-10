@@ -18,6 +18,9 @@ class Account(models.Model):
     balance = models.DecimalField(max_digits=15, decimal_places=2)
     user = models.ForeignKey('auth.User', on_delete=models.PROTECT)
 
+    def __str__(self):
+        return self.name
+
 
 class Transaction(models.Model):
     """
