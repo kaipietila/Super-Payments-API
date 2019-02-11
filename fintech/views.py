@@ -17,9 +17,18 @@ class TransactionList(APIView):
 
 class AccountDetail(APIView):
     """
-    Get details of one account
+    Get details of one account by uuid
     """
-    pass
+    def get(self, request, uuid):
+        uuid_str = str(uuid)
+        account = Account.objects.get(uuid=uuid_str)
+        serializer = AccountSerializer(account)
+        return Response(serializer.data)
 
 class AccountBalanceDetails(APIView):
-    pass
+    
+    def get(self, request, uuid):
+        uuid_str = str(uuid)
+        account = Account.objects.get(uuid=uuid_str)
+        serializer = AccountSerializer(account)
+        return Response(serializer.data['balance'])

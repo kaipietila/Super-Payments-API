@@ -4,3 +4,4 @@ from fintech import views
 class APIview_tests(TestCase):
     pass
 
+
