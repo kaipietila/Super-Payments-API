@@ -9,7 +9,8 @@ class TransactionList(APIView):
     Get a List of all Transactions from an account
     """
     def get(self, request, uuid):
-        account = Account.object.get(uuid)
+        uuid_str = str(uuid)
+        account = Account.objects.get(uuid=uuid_str)
         transactions = account.transactions.all()
         serializer = TransactionSerializer(transactions, many=True)
         return Response(serializer.data)
