@@ -1,6 +1,8 @@
+import json
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.http import HttpResponse
 from .models import Account, Transaction
 from .serializers import AccountSerializer, TransactionSerializer
 
@@ -18,12 +20,10 @@ class TransactionList(APIView):
     def post(self, request, uuid):
         uuid_str = str(uuid)
         account = Account.objects.get(uuid=uuid_str)
-        current_balance = account.balance
-        if current_balance < int(request.data['amount']):
-            return Response(status=status.HTTP_404_BAD_REQUEST)
         serializer = TransactionSerializer(data=request.data)
-        serializer.data['account'] = account
         if serializer.is_valid():
+            if account.check_if_overdrawn(float(serializer.validated_data['amount'])):
+                return HttpResponse("Insufficient Account balance")
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
     

@@ -18,3 +18,7 @@ class APIview_tests(TestCase):
         response = self.client.get(reverse('fintech:transaction-list', args=[uuid]))
         # Check that the response is 200 OK.
         self.assertEqual(response.status_code, 200)
+
+    def test_transaction_post(self):
+        uuid = 'a94d387d-2e9f-4a97-9db5-c1696aea1771'
+        request = self.client.post(reverse('fintech:transaction-list', args=[uuid]))

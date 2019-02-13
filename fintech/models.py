@@ -29,6 +29,12 @@ class Account(models.Model):
             return True
         else: 
             return False
+    
+    def check_if_overdrawn(self, transaction_amount):
+        self.check_balance()
+        current_balance = self.balance 
+        if float(current_balance) + transaction_amount < 0:
+            return True
 
 class Transaction(models.Model):
     """
