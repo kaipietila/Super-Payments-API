@@ -32,7 +32,8 @@ class Account(models.Model):
     
     def check_if_overdrawn(self, transaction_amount):
         self.check_balance()
-        current_balance = self.balance 
+        current_balance = self.balance
+        #converting to float to be able to do the comparisonS 
         if float(current_balance) + transaction_amount < 0:
             return True
 

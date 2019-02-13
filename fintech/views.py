@@ -23,7 +23,7 @@ class TransactionList(APIView):
         serializer = TransactionSerializer(data=request.data)
         if serializer.is_valid():
             if account.check_if_overdrawn(float(serializer.validated_data['amount'])):
-                return HttpResponse("Insufficient Account balance")
+                return HttpResponse("Insufficient Account balance, transaction will not be processed")
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
     

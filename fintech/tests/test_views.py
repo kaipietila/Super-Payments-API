@@ -3,6 +3,8 @@ from django.test import Client
 from django.urls import reverse
 from fintech import views
 
+#TODO Setup mock accounts etc and try again
+
 class APIview_tests(TestCase):
     
     def setUp(self):
