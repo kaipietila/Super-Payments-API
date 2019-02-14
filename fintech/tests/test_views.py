@@ -1,8 +1,9 @@
 from django.test import TestCase
-from django.test import Client
+from rest_framework.test import APIClient
 from django.urls import reverse
 from django.contrib.auth.models import User
 import uuid
+import datetime
 
 from fintech import views
 from fintech.models import Account
@@ -13,7 +14,8 @@ class APIview_tests(TestCase):
         self.user = User.objects.create(username='testUser', password = 'testuser')
         self.account = Account.objects.create(name='testAccount', 
                                                 balance=0.00, user=self.user)
-        self.client = Client()
+        self.client = APIClient()
+        
 
     def test_transaction_list(self):
         """
@@ -37,9 +39,40 @@ class APIview_tests(TestCase):
         self.assertEqual(response.status_code, 404)
     
     def test_transaction_post(self):
-        pass
-        """ uuid = 'a94d387d-2e9f-4a97-9db5-c1696aea1771'
-        request = self.client.post(reverse('fintech:transaction-list', kwargs={'uuid': uuid}))"""
+        """
+        POST api/account/uuid/transactions
+        testing the creation of a new payment
+        """
+        uuid = self.account.uuid
+        data = {'account': uuid, 
+                'amount': 50.00, 
+                'description': 'Testtest', 
+                'transaction_date': "2019-02-14", 
+                'active': True,
+                }
+        url = reverse('fintech:transaction-list', kwargs={'uuid': uuid,})
+        response = self.client.post(url, data, format = 'json')
+        # Check that the response is 201 CREATED.
+        self.assertEqual(response.status_code, 201)
+    
+    def test_transaction_post(self):
+        """
+        POST api/account/uuid/transactions
+        testing the creation of a new payment thats overdrawing the account 
+        and should not be processed
+        """
+        uuid = self.account.uuid
+        data = {'account': uuid, 
+                'amount': -50.00, 
+                'description': 'overdrawnTesttest', 
+                'transaction_date': "2019-02-14", 
+                'active': True,
+                }
+        url = reverse('fintech:transaction-list', kwargs={'uuid': uuid,})
+        response = self.client.post(url, data, format = 'json')
+        # Check that the response is 200 OK, because the faulty transaction
+        # will return a HttpResponse with some text, that equals to 200.
+        self.assertEqual(response.status_code, 200)
     
     def test_account_detail(self):
         """
