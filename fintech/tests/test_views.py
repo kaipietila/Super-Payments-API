@@ -55,7 +55,7 @@ class APIview_tests(TestCase):
         # Check that the response is 201 CREATED.
         self.assertEqual(response.status_code, 201)
     
-    def test_transaction_post(self):
+    def test_transaction_post_overdraw(self):
         """
         POST api/account/uuid/transactions
         testing the creation of a new payment thats overdrawing the account 
@@ -72,6 +72,7 @@ class APIview_tests(TestCase):
         response = self.client.post(url, data, format = 'json')
         # Check that the response is 200 OK, because the faulty transaction
         # will return a HttpResponse with some text, that equals to 200.
+        # response would be 201 for successfully created object
         self.assertEqual(response.status_code, 200)
     
     def test_account_detail(self):
