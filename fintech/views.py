@@ -3,6 +3,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 from .models import Account, Transaction
 from .serializers import AccountSerializer, TransactionSerializer
 
@@ -12,14 +13,14 @@ class TransactionList(APIView):
     """
     def get(self, request, uuid):
         uuid_str = str(uuid)
-        account = Account.objects.get(uuid=uuid_str)
+        account = get_object_or_404(Account, uuid=uuid_str)
         transactions = account.transactions.all()
         serializer = TransactionSerializer(transactions, many=True)
         return Response(serializer.data)
 
     def post(self, request, uuid):
         uuid_str = str(uuid)
-        account = Account.objects.get(uuid=uuid_str)
+        account = get_object_or_404(Account, uuid=uuid_str)
         serializer = TransactionSerializer(data=request.data)
         if serializer.is_valid():
             if account.check_if_overdrawn(float(serializer.validated_data['amount'])):
