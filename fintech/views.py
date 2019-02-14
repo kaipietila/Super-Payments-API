@@ -9,6 +9,7 @@ from .serializers import AccountSerializer, TransactionSerializer
 
 class TransactionList(APIView):
     """
+    GET api/account/uuid/transactions
     Get a List of all Transactions from an account
     """
     def get(self, request, uuid):
@@ -19,6 +20,11 @@ class TransactionList(APIView):
         return Response(serializer.data)
 
     def post(self, request, uuid):
+        """
+        POST api/account/uuid/transactions
+        Creates a new transaction
+        tests if the transaction makes the account balance go negative
+        """
         uuid_str = str(uuid)
         account = get_object_or_404(Account, uuid=uuid_str)
         serializer = TransactionSerializer(data=request.data)
@@ -31,11 +37,12 @@ class TransactionList(APIView):
 
 class AccountDetail(APIView):
     """
-    Get details of one account by uuid
+    GET api/account/uuid
+    Get the account details of one account
     """
     def get(self, request, uuid):
         uuid_str = str(uuid)
-        account = Account.objects.get(uuid=uuid_str)
+        account = get_object_or_404(Account, uuid=uuid_str)
         #checks the balance of the account and save it to the db
         account.check_balance()
         account.save()
@@ -43,10 +50,14 @@ class AccountDetail(APIView):
         return Response(serializer.data)
 
 class AccountBalanceDetails(APIView):
+    """
+    GET api/account/uuid/balance
+    Get the balance for one account
+    """
     
     def get(self, request, uuid):
         uuid_str = str(uuid)
-        account = Account.objects.get(uuid=uuid_str)
+        account = get_object_or_404(Account, uuid=uuid_str)
         #checks the balance of the account and save it to the db
         account.check_balance()
         account.save()
