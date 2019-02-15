@@ -49,6 +49,8 @@ class AccountDetail(APIView):
         serializer = AccountSerializer(account)
         return Response(serializer.data)
 
+#todo create a post request to create new account
+
 class AccountBalanceDetails(APIView):
     """
     GET api/account/uuid/balance
