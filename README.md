@@ -1,4 +1,4 @@
-Holvi transaction API exercise documentation
+Holvi transaction API exercise 
 ==============================
 
 Welcome to The Super Payments API!
