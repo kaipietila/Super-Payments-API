@@ -11,7 +11,7 @@ from fintech.models import Account
 class APIview_tests(TestCase):
     
     def setUp(self):
-        self.user = User.objects.create(username='testUser', password = 'testuser')
+        self.user = User.objects.create(username='testUser', password = 'testuser',)
         self.account = Account.objects.create(name='testAccount', 
                                                 balance=0.00, user=self.user)
         self.client = APIClient()

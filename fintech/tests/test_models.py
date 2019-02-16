@@ -6,7 +6,7 @@ import datetime
 class AccountTest(TestCase):
 
     def setUp(self):
-        self.user = User.objects.create(username='testUser', password = 'testuser')
+        self.user = User.objects.create(username='testUser', password = 'testuser',)
         self.account = Account.objects.create(name='testAccount', 
                                                 balance=0.00, user=self.user)
         self.balanced_transaction = Transaction.objects.create(account=self.account, amount=50.00,
