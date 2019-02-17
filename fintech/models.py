@@ -47,7 +47,7 @@ class Transaction(models.Model):
         on_delete=models.PROTECT)
     transaction_date = models.DateField()
     amount = models.DecimalField(max_digits=15, decimal_places=2)
-    description = models.CharField(max_length=20, blank=True, default='')
+    description = models.CharField(max_length=25, blank=True, default='')
 
     # If active is False, the transaction should not be visible to the
     # customer in any way.
