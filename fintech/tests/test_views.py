@@ -127,11 +127,14 @@ class APIview_tests(TestCase):
     def test_account_creation(self):
         """
         Test for creating a new account under a user 
+        Uuid field is autopopulated, balance is by default 0.00, since new accounts
+        rarely have a positive or negative balance.
         """
         pk = self.user.pk
         data = {
-            #add data
-        }
+            'name' : 'testAccount2',
+            'user' : self.user.pk
+            }
         url = reverse('fintech:account_list', kwargs={'pk': pk})
-        response = self.client.get(url, data, format='json'))
-        self.assertEqual(response.status_code, 200)
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, 201)

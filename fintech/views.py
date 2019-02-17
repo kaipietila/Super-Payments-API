@@ -73,6 +73,12 @@ class AccountList(APIView):
     """
     def get(self, request, pk):
         user = get_object_or_404(User, pk=pk)
-        accounts = Account.objects.filter(user=pk)
+        accounts = Account.objects.filter(user=user)
         serializer = AccountSerializer(accounts, many=True)
         return Response(serializer.data)
+
+    def post(self, request, pk):
+        serializer = AccountSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)

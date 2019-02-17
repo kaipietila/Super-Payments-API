@@ -5,17 +5,11 @@ import uuid
 class Account(models.Model):
     """
     Represents a bank account in the system.
-
-    The users of Account and Transaction model should make sure that the
-    following conditions are always True:
-        account.balance == sum(
-           t.amount for t in account.transactions.all() if t.active
-        )
-        account.balance >= 0
+    Balance is updated with the check_balance func
     """
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4)
     name = models.CharField(max_length=20)
-    balance = models.DecimalField(max_digits=15, decimal_places=2)
+    balance = models.DecimalField(max_digits=15, decimal_places=2, default = 0.00)
     user = models.ForeignKey('auth.User', on_delete=models.PROTECT)
 
     def __str__(self):
@@ -24,7 +18,7 @@ class Account(models.Model):
     def check_balance(self):
         """
         Updating the account balance to the current sum of transactions.
-        Returns True if the balance is positive 
+        Returns the current balance.
         """
         self.balance = sum(
            t.amount for t in self.transactions.all() if t.active
@@ -32,6 +26,11 @@ class Account(models.Model):
         return self.balance
     
     def check_if_overdrawn(self, transaction_amount):
+        """
+        Checks if a transaction overdraws the account. 
+        Is done before each transaction is processed to ensure
+        that account balance is not overdrawn.
+        """
         current_balance = self.check_balance()
         #converting to float to be able to do the comparisons 
         if float(current_balance) + transaction_amount < 0:

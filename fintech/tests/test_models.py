@@ -28,7 +28,7 @@ class AccountTest(TestCase):
         self.assertEqual(str(self.account), self.account.name)
     
     def test_account_balance_check(self):
-        self.assertEqual(self.account.check_balance(), self.balance)
+        self.assertEqual(self.account.check_balance(), self.account.balance)
 
 class AccountBalanceFailTest(TestCase):
     def setUp(self):
