@@ -1,18 +1,22 @@
-import json
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from .models import Account, Transaction
+from django.contrib.auth.models import User
 from .serializers import AccountSerializer, TransactionSerializer
 
 class TransactionList(APIView):
+    """
+    get:
+    get a List of all Transactions from an account
+
+    post:
+    Creates a new transaction.
+    Tests if the transaction makes the account balance go negative.
+    """
     def get(self, request, uuid):
-        """
-        get:
-        get a List of all Transactions from an account
-        """
         uuid_str = str(uuid)
         account = get_object_or_404(Account, uuid=uuid_str)
         transactions = account.transactions.all()
@@ -20,11 +24,6 @@ class TransactionList(APIView):
         return Response(serializer.data)
 
     def post(self, request, uuid):
-        """
-        post:
-        Creates a new transaction.
-        Tests if the transaction makes the account balance go negative.
-        """
         uuid_str = str(uuid)
         account = get_object_or_404(Account, uuid=uuid_str)
         serializer = TransactionSerializer(data=request.data)
@@ -49,8 +48,6 @@ class AccountDetail(APIView):
         serializer = AccountSerializer(account)
         return Response(serializer.data)
 
-#todo create a post request to create new account
-
 class AccountBalanceDetails(APIView):
     """
     get:
@@ -64,3 +61,18 @@ class AccountBalanceDetails(APIView):
         account.save()
         serializer = AccountSerializer(account)
         return Response(serializer.data['balance'])
+
+class AccountList(APIView):
+    """
+    get:
+    Get a list of all the accounts for a user specified by the user
+    pk number
+
+    post:
+    Creates a new account for the user specified by the pk number
+    """
+    def get(self, request, pk):
+        user = get_object_or_404(User, pk=pk)
+        accounts = Account.objects.filter(user=pk)
+        serializer = AccountSerializer(accounts, many=True)
+        return Response(serializer.data)

@@ -22,18 +22,18 @@ class Account(models.Model):
         return self.name
     
     def check_balance(self):
+        """
+        Updating the account balance to the current sum of transactions.
+        Returns True if the balance is positive 
+        """
         self.balance = sum(
            t.amount for t in self.transactions.all() if t.active
         )
-        if self.balance >= 0:
-            return True
-        else: 
-            return False
+        return self.balance
     
     def check_if_overdrawn(self, transaction_amount):
-        self.check_balance()
-        current_balance = self.balance
-        #converting to float to be able to do the comparisonS 
+        current_balance = self.check_balance()
+        #converting to float to be able to do the comparisons 
         if float(current_balance) + transaction_amount < 0:
             return True
 

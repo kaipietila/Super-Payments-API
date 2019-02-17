@@ -115,4 +115,10 @@ class APIview_tests(TestCase):
         # Check that the response is 404, because uuid is not matching.
         self.assertEqual(response.status_code, 404)
 
-    
+    def test_account_list(self):
+        """
+        testing account list view
+        """
+        pk = self.user.pk
+        response = self.client.get(reverse('fintech:account_list', kwargs={'pk': pk}))
+        self.assertEqual(response.status_code, 200)
