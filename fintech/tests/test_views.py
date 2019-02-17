@@ -62,7 +62,8 @@ class APIview_tests(TestCase):
         and should not be processed
         """
         uuid = self.account.uuid
-        data = {'account': uuid, 
+        data = {
+                'account': uuid, 
                 'amount': -50.00, 
                 'description': 'overdrawnTesttest', 
                 'transaction_date': "2019-02-14", 
@@ -121,4 +122,16 @@ class APIview_tests(TestCase):
         """
         pk = self.user.pk
         response = self.client.get(reverse('fintech:account_list', kwargs={'pk': pk}))
+        self.assertEqual(response.status_code, 200)
+
+    def test_account_creation(self):
+        """
+        Test for creating a new account under a user 
+        """
+        pk = self.user.pk
+        data = {
+            #add data
+        }
+        url = reverse('fintech:account_list', kwargs={'pk': pk})
+        response = self.client.get(url, data, format='json'))
         self.assertEqual(response.status_code, 200)
