@@ -19,7 +19,9 @@ class TransactionList(APIView):
     def get(self, request, uuid):
         uuid_str = str(uuid)
         account = get_object_or_404(Account, uuid=uuid_str)
-        transactions = account.transactions.all()
+        
+        #queries all transactions for the account that are active
+        transactions = account.transactions.all().filter(active=True)
         serializer = TransactionSerializer(transactions, many=True)
         return Response(serializer.data)
 
