@@ -21,9 +21,14 @@ When server running you can refer to the API docs <a href=http://127.0.0.1:8000/
 
 From the different endpoints you can: 
    1. Get account detail information(GET account/uuid/)
-   2. Get account balance details(GET account/uuid/balance)
-   3. Get all transactions for the account (GET account/uuid/transactions)
-   4. Create a new transaction (POST account/uuid/transactions)
+   2. Get account balance details(GET account/uuid/balance/)
+   3. Get all transactions for the account (GET account/uuid/transactions/)
+   4. Create a new transaction (POST account/uuid/transactions/)
+   5. Get a list of accounts for the user (GET account/pk/)
+   6. Create a new account for the user (POST account/pk/)
+   7. Get a list of users (GET users/)
+   8. Create a new user (POST users/)
+   9. Get details of specific user (GET users/pk/)
 
 Tests:
 --------------
