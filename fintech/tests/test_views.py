@@ -62,7 +62,8 @@ class APIview_tests(TestCase):
         and should not be processed
         """
         uuid = self.account.uuid
-        data = {'account': uuid, 
+        data = {
+                'account': uuid, 
                 'amount': -50.00, 
                 'description': 'overdrawnTesttest', 
                 'transaction_date': "2019-02-14", 
@@ -115,4 +116,25 @@ class APIview_tests(TestCase):
         # Check that the response is 404, because uuid is not matching.
         self.assertEqual(response.status_code, 404)
 
-    
+    def test_account_list(self):
+        """
+        testing account list view
+        """
+        pk = self.user.pk
+        response = self.client.get(reverse('fintech:account_list', kwargs={'pk': pk}))
+        self.assertEqual(response.status_code, 200)
+
+    def test_account_creation(self):
+        """
+        Test for creating a new account under a user 
+        Uuid field is autopopulated, balance is by default 0.00, since new accounts
+        rarely have a positive or negative balance.
+        """
+        pk = self.user.pk
+        data = {
+            'name' : 'testAccount2',
+            'user' : self.user.pk
+            }
+        url = reverse('fintech:account_list', kwargs={'pk': pk})
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, 201)

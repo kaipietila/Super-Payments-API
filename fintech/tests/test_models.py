@@ -28,7 +28,7 @@ class AccountTest(TestCase):
         self.assertEqual(str(self.account), self.account.name)
     
     def test_account_balance_check(self):
-        self.assertTrue(self.account.check_balance())
+        self.assertEqual(self.account.check_balance(), self.account.balance)
 
 class AccountBalanceFailTest(TestCase):
     def setUp(self):
@@ -41,6 +41,3 @@ class AccountBalanceFailTest(TestCase):
 
     def test_transaction_list(self):
         self.assertEqual(len(self.second_account.transactions.all()), 1)
-
-    def test_2_account_balance_check(self):
-        self.assertFalse(self.second_account.check_balance())
