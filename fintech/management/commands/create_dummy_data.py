@@ -6,8 +6,10 @@ import datetime
 from random import randint
 """
 This is a command to load some dummy data to the db.
-Use command manage.py create_dummy_data <int>
-The variable will stand for how many accounts you want created.
+Use command manage.py create_dummy_data <int> --prefix <string>
+The variable will stand for how many accounts you want created
+and what kind of prefix you want for the account names, to be able to 
+differentiate them from the other users.
 Default will be one and will create 1 User with 1 Account with 
 10 Transactions.
 """
